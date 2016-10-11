@@ -110,6 +110,7 @@ class Morris.Grid extends Morris.EventEmitter
     xLabelAngle: 0
     numLines: 5
     padding: 25
+    paddingLeftExtra: 0
     parseTime: true
     postUnits: ''
     preUnits: ''
@@ -291,7 +292,7 @@ class Morris.Grid extends Morris.EventEmitter
       @elementHeight = h
       @dirty = false
       # recalculate grid dimensions
-      @left = @options.padding
+      @left = @options.padding + @options.paddingLeftExtra
       @right = @elementWidth - @options.padding
       @top = @options.padding
       @bottom = @elementHeight - @options.padding
@@ -454,6 +455,14 @@ class Morris.Grid extends Morris.EventEmitter
     @raphael.path(path)
       .attr('stroke', color)
       .attr('stroke-width', @options.goalStrokeWidth)
+
+    idx = $.inArray(goal, @options.goals)
+    if @options.goalLabels and @options.goalLabels[idx]
+      @raphael.text(@options.paddingLeftExtra, @transY(goal), @options.goalLabels[idx])
+        .attr('text-anchor', 'end')
+        .attr('fill', color)
+        .attr('font-family', @options.gridTextFamily)
+        .attr('font-size', @options.gridTextSize);
 
   drawEvent: (event, color) ->
     if event instanceof Array
